@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Shop</title>
+    <!-- tailwind css cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- remixicon cdn -->
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"/>
+
+
+</head>
+<body>
+    
+    <header class="shadow-md">
+        <nav class="container mx-auto px-4 py-2 flex items-center justify-between">
+            <!-- logo -->
+             <div class="flex items-center justify-center">
+                <img class="w-14" src="assets//download.png" alt="">
+                <h1 class="text-green-500 text-xl font-medium">Plant-Shop</h1>
+             </div>
+            <!-- nav-content -->
+             <div class="flex items-center justify-center gap-3 relative">
+                <!-- profile -->
+                 <div>
+                    <i class="ri-user-3-fill text-2xl border border-gray-700 hover:bg-gray-200 p-2 rounded-full cursor-pointer"></i>
+                 </div>
+                 <!-- cart -->
+                 <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" ><div id="cart-btn" class="relative cursor-pointer">
+                        <i class="ri-shopping-cart-2-line text-2xl cursor-pointer hover:bg-gray-200 hover:border border-gray-700 p-2 rounded-full "></i>
+                        <span id="count-product" class="bg-white border border-gray-200 px-2 rounded-lg absolute left-5 bottom-[13px]">0</span>
+                     </div></div>
+                    <div tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mt-5">
+                        <div id="car-dtls" class=" w-[200px] h-[160px]  rounded-xl p-5 space-y-2 borde">
+                            <h1 class="text-2xl font-bold"><span id="count-item">0</span> Items</h1>
+                            <p class="text-sky-500">Subtotla: $ <span id="total-sum">0</span></p>
+                            <button class="bg-green-600 w-full px-5 py-2 rounded-md text-xl">Cart View</button>
+                         </div>
+                    </div>
+                  </div>
+                 
+             </div>
+        </nav>
+    </header>
+    <main class="container mx-auto px-4 py-10">
+        <!-- cards -->
+         <div  id="cards" class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+             
+         </div>
+       
+    </main>
+
+    <script src="scripts/script.js"></script>
+    <script src="scripts/data.js"></script>
+</body>
+</html>
