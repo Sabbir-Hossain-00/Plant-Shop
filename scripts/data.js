@@ -169,27 +169,10 @@ const products = [
     },
   ];
 
-
-
-
-const addToCart = (price , img , name)=>{
-  console.log(price);
-  console.log(img);
-  const newTr = document.createElement("tr");
-  newTr.innerHTML = `
-    <tr>
-    <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="${img}" alt=""></td>
-    <td class="border border-gray-200 p-3 text-center">${name}</td>
-    <td class="border border-gray-200 p-3 text-center">4</td>
-    <td class="border border-gray-200 p-3 text-center">$${price}</td>
-    <td class="border border-gray-200 p-3 text-center">$1600</td>
-    </tr>
-  `;
-
-  document.getElementById("table").append(newTr);
-
-}
-
+  
+let count = 0 ;
+let subTotalArr = [] ;
+let allProductPrice = 0 ;
 for(let product of products){
   const newDiv = document.createElement("div");
   newDiv.innerHTML = `
@@ -199,11 +182,69 @@ for(let product of products){
         </div>
         <h1 class="text-2xl text-center">${product.name}</h1>
         <p class="text-lg">Price : <span>$ ${product.price}</span></p>
-        <button id = "add-to-cart-btn" onclick="addToCart(${product.price}, '${product.img_url}' , '${product.name}')" class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
+        <div class = "flex items-center justify-center gap-3 ">
+           <div class ="bg-red-200 px-4 py-2 rounded-lg space-x-4">
+           <span id = "minas" class ="bg-white px-3 pb-1 text-xl rounded-md cursor-pointer">-</span>
+           <span id = "count-val" class = "text-xl font-bold">0</span>
+           <span id = "plus" class ="bg-white px-3 text-xl rounded-md cursor-pointer pb-1">+</span>
+           </div>
+           <button class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
+        </div>
+        
   </div>
   `
+  const minas = newDiv.querySelector("#minas");
+  const countVal = newDiv.querySelector("#count-val");
+  const plus = newDiv.querySelector("#plus");
+
+  plus.addEventListener("click",()=>{
+    count++;
+    countVal.innerText = count ;
+  });
+  minas.addEventListener("click",()=>{
+    if(countVal.innerText > 0){
+      count -- ;
+      countVal.innerText = count ;
+    }else{
+      countVal.innerText = 0 ;
+    }
+    
+  })
   document.getElementById("cards").append(newDiv);
+
+
+  
+  const addToCartBtn = newDiv.querySelector("button");
+  addToCartBtn.addEventListener("click",()=>{
+   if(countVal.innerText > 0){
+    const totalPrice = product.price * countVal.innerText ;
+    const newTr = document.createElement("tr");
+    newTr.innerHTML = `
+      <tr>
+      <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="${product.img_url}" alt=""></td>
+      <td class="border border-gray-200 p-3 text-center">${product.name}</td>
+      <td class="border border-gray-200 p-3 text-center">${countVal.innerText}</td>
+      <td class="border border-gray-200 p-3 text-center">$${product.price}</td>
+      <td class="border border-gray-200 p-3 text-center">$${totalPrice} </td>
+      </tr>
+    `;
+    
+    document.getElementById("table").append(newTr);
+
+    subTotalArr.push(totalPrice);
+    const totalAmount = subTotalArr.reduce((accm , currElm)=>{
+       return accm = accm + currElm
+    },0);
+    document.getElementById("subtotalAmount").innerText = totalAmount ;
+    
+    count = 0 ;
+    countVal.innerText = count ;
+
+   }
+  
+  });
   
 }
+
 
 
