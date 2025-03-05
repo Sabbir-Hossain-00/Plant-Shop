@@ -172,12 +172,13 @@ const products = [
 
 
 
-const addToCart = (price)=>{
+const addToCart = (price , img)=>{
   console.log(price);
+  console.log(img);
   const newTr = document.createElement("tr");
   newTr.innerHTML = `
     <tr>
-    <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="" alt=""></td>
+    <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="${img}" alt=""></td>
     <td class="border border-gray-200 p-3 text-center"></td>
     <td class="border border-gray-200 p-3 text-center">4</td>
     <td class="border border-gray-200 p-3 text-center">$${price}</td>
@@ -198,7 +199,7 @@ for(let product of products){
         </div>
         <h1 class="text-2xl text-center">${product.name}</h1>
         <p class="text-lg">Price : <span>$ ${product.price}</span></p>
-        <button id = "add-to-cart-btn" onclick="addToCart(${product.price})" class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
+        <button id = "add-to-cart-btn" onclick="addToCart(${product.price}, '${product.img_url}')" class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
   </div>
   `
   document.getElementById("cards").append(newDiv);
