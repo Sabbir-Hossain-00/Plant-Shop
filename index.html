@@ -36,11 +36,17 @@
                         <i class="ri-shopping-cart-2-line text-2xl cursor-pointer hover:bg-gray-200 hover:border border-gray-700 p-2 rounded-full "></i>
                         <span id="count-product" class="bg-white border border-gray-200 px-2 rounded-lg absolute left-5 bottom-[13px]">0</span>
                      </div></div>
-                    <div tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mt-5">
-                        <div id="car-dtls" class=" w-[200px] h-[160px]  rounded-xl p-5 space-y-2 borde">
-                            <h1 class="text-2xl font-bold"><span id="count-item">0</span> Items</h1>
-                            <p class="text-sky-500">Subtotla: $ <span id="total-sum">0</span></p>
-                            <button class="bg-green-600 w-full px-5 py-2 rounded-md text-xl">Cart View</button>
+                    <div tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-[700px] p-2 shadow-sm mt-5">
+                        <div id="car-dtls" class="w-full">
+                            <table  id="table">
+                                <tr class="space-x-3">
+                                    <th class="mr-4 border border-gray-200 p-3 text-center">Product</th>
+                                    <th class="mr-4 border border-gray-200 p-3 text-center">Product Name</th>
+                                    <th class="mr-4 border border-gray-200 p-3 text-center">Quantity</th>
+                                    <th class="mr-4 border border-gray-200 p-3 text-center">Price</th>
+                                    <th class="mr-4 border border-gray-200 p-3 text-center">Total Price</th>
+                                </tr>
+                            </table>
                          </div>
                     </div>
                   </div>
@@ -56,6 +62,7 @@
        
     </main>
 
+   
     <script src="scripts/script.js"></script>
     <script src="scripts/data.js"></script>
 </body>

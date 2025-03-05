@@ -169,15 +169,23 @@ const products = [
     },
   ];
 
-let count = 0 ;
-let sumTotal = 0 ;
+
+
+
 const addToCart = (price)=>{
-  count ++ ;
-  sumTotal = sumTotal + price ; 
-  document.getElementById("count-product").innerText = count ;
-  document.getElementById("count-item").innerText = count ;
-  document.getElementById("total-sum").innerText = sumTotal;
-  console.log("clicked")
+  console.log(price);
+  const newTr = document.createElement("tr");
+  newTr.innerHTML = `
+    <tr>
+    <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="" alt=""></td>
+    <td class="border border-gray-200 p-3 text-center"></td>
+    <td class="border border-gray-200 p-3 text-center">4</td>
+    <td class="border border-gray-200 p-3 text-center">$${price}</td>
+    <td class="border border-gray-200 p-3 text-center">$1600</td>
+    </tr>
+  `;
+
+  document.getElementById("table").append(newTr);
 
 }
 
@@ -190,7 +198,7 @@ for(let product of products){
         </div>
         <h1 class="text-2xl text-center">${product.name}</h1>
         <p class="text-lg">Price : <span>$ ${product.price}</span></p>
-        <button onclick="addToCart(${product.price})" class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
+        <button id = "add-to-cart-btn" onclick="addToCart(${product.price})" class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
   </div>
   `
   document.getElementById("cards").append(newDiv);
