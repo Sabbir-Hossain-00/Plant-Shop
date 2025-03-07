@@ -171,8 +171,11 @@ const products = [
 
   
 let count = 0 ;
-let subTotalArr = [] ;
 let allProductPrice = 0 ;
+const subTotalArr =  [] ;
+
+
+
 for(let product of products){
   const newDiv = document.createElement("div");
   newDiv.innerHTML = `
@@ -212,8 +215,8 @@ for(let product of products){
   })
   document.getElementById("cards").append(newDiv);
 
-
   
+
   const addToCartBtn = newDiv.querySelector("button");
   addToCartBtn.addEventListener("click",()=>{
    if(countVal.innerText > 0){
@@ -226,25 +229,53 @@ for(let product of products){
       <td class="border border-gray-200 p-3 text-center">${countVal.innerText}</td>
       <td class="border border-gray-200 p-3 text-center">$${product.price}</td>
       <td class="border border-gray-200 p-3 text-center">$${totalPrice} </td>
+      <td class="border border-gray-200 p-3 text-center"><button class="bg-sky-500 px-4 py-2 rounded-md cursor-pointer">Buy Now</button></td>
       </tr>
     `;
     
     document.getElementById("table").append(newTr);
 
     subTotalArr.push(totalPrice);
+
     const totalAmount = subTotalArr.reduce((accm , currElm)=>{
        return accm = accm + currElm
     },0);
+
     document.getElementById("subtotalAmount").innerText = totalAmount ;
+
     
     count = 0 ;
     countVal.innerText = count ;
 
+   const buyNowBtn = newTr.querySelector("button");
+
+   buyNowBtn.addEventListener("click",(event)=>{
+      const dltTr = event.target.parentElement.parentElement;
+      const dltTotal = event.target.parentElement.previousElementSibling.innerText ;
+      const newDltTotal = parseInt(dltTotal.slice(1));
+
+    if(subTotalArr.includes(newDltTotal)){
+      let index = subTotalArr.indexOf(newDltTotal);
+      subTotalArr.splice(index , 1);
+    }
+    console.log(subTotalArr);
+
+    const totalAmount = subTotalArr.reduce((accm , currElm)=>{
+       return accm = accm + currElm
+    },0);
+    document.getElementById("subtotalAmount").innerText = totalAmount ;
+    dltTr.innerHTML = "";
+
+   })
+
    }
   
   });
-  
+
+ 
 }
+
+
 
 
 
