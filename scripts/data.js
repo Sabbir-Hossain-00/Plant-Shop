@@ -170,10 +170,141 @@ const products = [
   ];
 
   
-let count = 0 ;
-let allProductPrice = 0 ;
-const subTotalArr =  [] ;
 
+
+let count = 0 ;
+
+
+
+
+
+const plusBtn = (countVal)=>{
+  count++;
+  countVal.innerText = count ;
+}
+const minasBtn = (countVal)=>{
+  if(countVal.innerText > 0){
+    count -- ;
+    countVal.innerText = count ;
+  }else{
+    countVal.innerText = 0 ;
+  }
+}
+
+
+
+// const subTotalArr =  [] ;
+// const subTotalAmount = (totalPrice)=>{
+//   subTotalArr.push(totalPrice)
+//   const subTotal = subTotalArr.reduce((accm , currElm)=>{
+//       return accm = accm + currElm ;
+//   },0);
+
+//   document.getElementById("subtotalAmount").innerText = subTotal ;
+// }
+
+
+
+
+const removeFromCart = (event)=>{
+  const dltTr = event.target.parentElement.parentElement;
+  const dltTotal = event.target.parentElement.previousElementSibling.innerText ;
+  const newDltTotal = parseInt(dltTotal.slice(1));
+
+  let updatedCart = JSON.parse(localStorage.getItem("localName")) || [];
+  updatedCart = updatedCart.filter((currElm)=>{
+   return currElm[4] !== newDltTotal ;
+  });
+
+localStorage.setItem("localName",JSON.stringify(updatedCart))
+ 
+recalculate();
+dltTr.innerHTML = "";
+
+}
+
+const recalculate = ()=>{
+  let updatedCart = JSON.parse(localStorage.getItem("localName")) || [];
+ let total = updatedCart.reduce((accum , currElm)=>{
+ return accum = accum + currElm[4] ;
+ },0)
+ document.getElementById("subtotalAmount").innerText = total;
+}
+
+
+
+
+
+const nameArr = JSON.parse(localStorage.getItem("localName")) || [];
+
+const setLocalName = (newTr , index)=>{
+  const item = nameArr[index];
+   newTr.innerHTML = `
+      <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="${item[0]}" alt=""></td>
+      <td class="border border-gray-200 p-3 text-center">${item[1]}</td>
+      <td class="border border-gray-200 p-3 text-center">${item[2]}</td>
+      <td class="border border-gray-200 p-3 text-center">$${item[3]}</td>
+      <td class="border border-gray-200 p-3 text-center">$${item[4]} </td>
+      <td id="butNowBtn" class="border border-gray-200 p-3 text-center"><button class="bg-sky-500 px-4 py-2 rounded-md cursor-pointer">Buy Now</button></td>
+    `
+    newTr.querySelector("#butNowBtn").addEventListener("click",(event)=>{
+      removeFromCart(event);
+    });
+}
+
+
+
+
+const addToCart = (price , img , name , countVal)=>{
+  if(countVal.innerText > 0){
+    const countValue = countVal.innerText ;
+    const totalPrice = countValue * price ;
+    const newTr = document.createElement("tr");
+    newTr.innerHTML = `
+     
+      <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="${img}" alt=""></td>
+      <td class="border border-gray-200 p-3 text-center">${name}</td>
+      <td class="border border-gray-200 p-3 text-center">${countValue}</td>
+      <td class="border border-gray-200 p-3 text-center">$${price}</td>
+      <td class="border border-gray-200 p-3 text-center">$${totalPrice} </td>
+      <td id="butNowBtn" class="border border-gray-200 p-3 text-center"><button class="bg-sky-500 px-4 py-2 rounded-md cursor-pointer">Buy Now</button></td>
+     
+    `;
+
+    
+    nameArr.push( [ img,name ,countValue , price , totalPrice ]);
+    localStorage.setItem("localName",JSON.stringify(nameArr));
+    setLocalName(newTr , nameArr.length-1);
+    recalculate();
+
+
+
+
+    newTr.querySelector("#butNowBtn").addEventListener("click",(event)=>{
+      removeFromCart(event);
+    });
+
+
+    recalculate();
+    count = 0 ;
+    countVal.innerText = 0;
+    document.getElementById("table").append(newTr);
+  }
+  
+}
+
+
+
+window.addEventListener("load",()=>{
+  const storedCart = JSON.parse(localStorage.getItem("localName")) || [];
+  storedCart.forEach((item, index) => {
+    console.log(item ,index)
+    const newTr = document.createElement("tr");
+    setLocalName(newTr, index);
+    document.getElementById("table").append(newTr);
+  });
+  recalculate();
+})
 
 
 for(let product of products){
@@ -187,95 +318,164 @@ for(let product of products){
         <p class="text-lg">Price : <span>$ ${product.price}</span></p>
         <div class = "flex items-center justify-center gap-3 ">
            <div class ="bg-red-200 px-4 py-2 rounded-lg space-x-4">
-           <span id = "minas" class ="bg-white px-3 pb-1 text-xl rounded-md cursor-pointer">-</span>
-           <span id = "count-val" class = "text-xl font-bold">0</span>
-           <span id = "plus" class ="bg-white px-3 text-xl rounded-md cursor-pointer pb-1">+</span>
+           <span id="minas" class ="bg-white px-3 pb-1 text-xl rounded-md cursor-pointer">-</span>
+           <span id="val" class = "text-xl font-bold">0</span>
+           <span id="plus" class="bg-white px-3 text-xl rounded-md cursor-pointer pb-1">+</span>
            </div>
-           <button class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
+           <button id="addBtn" class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
         </div>
         
   </div>
   `
-  const minas = newDiv.querySelector("#minas");
-  const countVal = newDiv.querySelector("#count-val");
-  const plus = newDiv.querySelector("#plus");
-
-  plus.addEventListener("click",()=>{
-    count++;
-    countVal.innerText = count ;
-  });
-  minas.addEventListener("click",()=>{
-    if(countVal.innerText > 0){
-      count -- ;
-      countVal.innerText = count ;
-    }else{
-      countVal.innerText = 0 ;
-    }
-    
-  })
   document.getElementById("cards").append(newDiv);
+  const countVal = newDiv.querySelector("#val");
+ 
 
-  
 
-  const addToCartBtn = newDiv.querySelector("button");
-  addToCartBtn.addEventListener("click",()=>{
-   if(countVal.innerText > 0){
-    const totalPrice = product.price * countVal.innerText ;
-    const newTr = document.createElement("tr");
-    newTr.innerHTML = `
-      <tr>
-      <td class="border border-gray-200 p-3 text-center"><img class="w-10" src="${product.img_url}" alt=""></td>
-      <td class="border border-gray-200 p-3 text-center">${product.name}</td>
-      <td class="border border-gray-200 p-3 text-center">${countVal.innerText}</td>
-      <td class="border border-gray-200 p-3 text-center">$${product.price}</td>
-      <td class="border border-gray-200 p-3 text-center">$${totalPrice} </td>
-      <td class="border border-gray-200 p-3 text-center"><button class="bg-sky-500 px-4 py-2 rounded-md cursor-pointer">Buy Now</button></td>
-      </tr>
-    `;
-    
-    document.getElementById("table").append(newTr);
 
-    subTotalArr.push(totalPrice);
 
-    const totalAmount = subTotalArr.reduce((accm , currElm)=>{
-       return accm = accm + currElm
-    },0);
 
-    document.getElementById("subtotalAmount").innerText = totalAmount ;
 
-    
-    count = 0 ;
-    countVal.innerText = count ;
-
-   const buyNowBtn = newTr.querySelector("button");
-
-   buyNowBtn.addEventListener("click",(event)=>{
-      const dltTr = event.target.parentElement.parentElement;
-      const dltTotal = event.target.parentElement.previousElementSibling.innerText ;
-      const newDltTotal = parseInt(dltTotal.slice(1));
-
-    if(subTotalArr.includes(newDltTotal)){
-      let index = subTotalArr.indexOf(newDltTotal);
-      subTotalArr.splice(index , 1);
-    }
-    console.log(subTotalArr);
-
-    const totalAmount = subTotalArr.reduce((accm , currElm)=>{
-       return accm = accm + currElm
-    },0);
-    document.getElementById("subtotalAmount").innerText = totalAmount ;
-    dltTr.innerHTML = "";
-
-   })
-
-   }
-  
+  newDiv.querySelector("#addBtn").addEventListener("click",()=>{
+    addToCart(product.price , product.img_url , product.name , countVal);
+  })
+  newDiv.querySelector("#minas").addEventListener("click", ()=>{
+    minasBtn(countVal)
+  });
+  newDiv.querySelector("#plus").addEventListener("click", ()=>{
+    plusBtn(countVal)
   });
 
- 
-}
+  };
 
 
 
 
 
+  
+
+
+
+
+
+
+
+
+
+
+//   // Initialize count variable
+// let count = 0;
+
+// // Function to get cart data from localStorage
+// const getCartFromLocalStorage = () => {
+//   return JSON.parse(localStorage.getItem("localName")) || [];
+// };
+
+// // Retrieve stored cart items
+// const nameArr = getCartFromLocalStorage();
+
+// // Function to increase count
+// const plusBtn = (countVal) => {
+//   count++;
+//   countVal.innerText = count;
+// };
+
+// // Function to decrease count (does not go below 0)
+// const minasBtn = (countVal) => {
+//   if (count > 0) {
+//     count--;
+//     countVal.innerText = count;
+//   }
+// };
+
+// // Subtotal Calculation
+// const subTotalArr = [];
+// const subTotalAmount = (totalPrice) => {
+//   subTotalArr.push(totalPrice);
+//   const subTotal = subTotalArr.reduce((acc, curr) => acc + curr, 0);
+//   document.getElementById("subtotalAmount").innerText = subTotal;
+// };
+
+// // Function to remove item from cart and update localStorage
+// const removeFromCart = (event) => {
+//   const dltTr = event.target.parentElement.parentElement;
+//   const dltTotal = parseInt(event.target.parentElement.previousElementSibling.innerText.slice(1));
+//   let updatedCart = JSON.parse(localStorage.getItem("localName")) || [];
+//   updatedCart = updatedCart.filter(item => item[4] !== dltTotal);
+//   localStorage.setItem("localName", JSON.stringify(updatedCart));
+//   recalculateSubtotal();
+//   dltTr.remove();
+// };
+
+// // Function to recalculate subtotal after removal
+// const recalculateSubtotal = () => {
+//   const storedCart = JSON.parse(localStorage.getItem("localName")) || [];
+//   let total = storedCart.reduce((sum, item) => sum + item[4], 0);
+//   document.getElementById("subtotalAmount").innerText = total;
+// };
+
+// // Function to set cart item from local storage into table
+// const setLocalName = (newTr, index) => {
+//   const item = nameArr[index];
+//   newTr.innerHTML = `
+//     <td class="border p-3 text-center"><img class="w-10" src="${item[0]}" alt=""></td>
+//     <td class="border p-3 text-center">${item[1]}</td>
+//     <td class="border p-3 text-center">${item[2]}</td>
+//     <td class="border p-3 text-center">$${item[3]}</td>
+//     <td class="border p-3 text-center">$${item[4]}</td>
+//     <td class="border p-3 text-center"><button class="bg-red-500 px-4 py-2 removeBtn">Remove</button></td>
+//   `;
+//   newTr.querySelector(".removeBtn").addEventListener("click", removeFromCart);
+// };
+
+// // Function to add item to cart
+// const addToCart = (price, img, name, countVal) => {
+//   if (countVal.innerText > 0) {
+//     const countValue = parseInt(countVal.innerText);
+//     const totalPrice = countValue * price;
+//     const newTr = document.createElement("tr");
+//     nameArr.push([img, name, countValue, price, totalPrice]);
+//     localStorage.setItem("localName", JSON.stringify(nameArr));
+//     setLocalName(newTr, nameArr.length - 1);
+//     document.getElementById("table").append(newTr);
+//     subTotalAmount(totalPrice);
+//     count = 0;
+//     countVal.innerText = 0;
+//   }
+// };
+
+// // Load cart items from localStorage on page load
+// window.addEventListener("load", () => {
+//   const storedCart = JSON.parse(localStorage.getItem("localName")) || [];
+//   storedCart.forEach((item, index) => {
+//     const newTr = document.createElement("tr");
+//     setLocalName(newTr, index);
+//     document.getElementById("table").append(newTr);
+//   });
+//   recalculateSubtotal();
+// });
+
+// // Creating product cards dynamically
+// for (let product of products) {
+//   const newDiv = document.createElement("div");
+//   newDiv.innerHTML = `
+//     <div class="flex flex-col items-center py-8 px-5 border rounded-lg">
+//       <img class="w-40" src="${product.img_url}" alt="">
+//       <h1 class="text-xl">${product.name}</h1>
+//       <p>Price: <span>$${product.price}</span></p>
+//       <div class="flex gap-3">
+//         <div class="bg-red-200 px-4 py-2 rounded-lg">
+//           <span class="bg-white px-3 rounded-md cursor-pointer minas">-</span>
+//           <span class="text-xl font-bold val">0</span>
+//           <span class="bg-white px-3 rounded-md cursor-pointer plus">+</span>
+//         </div>
+//         <button class="bg-blue-600 px-4 py-2 text-white addBtn">Add to Cart</button>
+//       </div>
+//     </div>
+//   `;
+//   document.getElementById("cards").append(newDiv);
+//   const countVal = newDiv.querySelector(".val");
+//   newDiv.querySelector(".addBtn").addEventListener("click", () => addToCart(product.price, product.img_url, product.name, countVal));
+//   newDiv.querySelector(".minas").addEventListener("click", () => minasBtn(countVal));
+//   newDiv.querySelector(".plus").addEventListener("click", () => plusBtn(countVal));
+// }
