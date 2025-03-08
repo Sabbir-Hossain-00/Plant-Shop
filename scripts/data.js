@@ -317,12 +317,15 @@ for(let product of products){
         <h1 class="text-2xl text-center">${product.name}</h1>
         <p class="text-lg">Price : <span>$ ${product.price}</span></p>
         <div class = "flex items-center justify-center gap-3 ">
-           <div class ="bg-red-200 px-4 py-2 rounded-lg space-x-4">
+        <div class="flex md:flex-row flex-col  justify-center items-center gap-3">
+        <div class ="bg-red-200 px-4 py-2 rounded-lg space-x-4">
            <span id="minas" class ="bg-white px-3 pb-1 text-xl rounded-md cursor-pointer">-</span>
            <span id="val" class = "text-xl font-bold">0</span>
            <span id="plus" class="bg-white px-3 text-xl rounded-md cursor-pointer pb-1">+</span>
            </div>
            <button id="addBtn" class="bg-sky-600 px-4 py-2 rounded-md text-xl text-white cursor-pointer">Add to Cart</button>
+        </div>
+           
         </div>
         
   </div>
