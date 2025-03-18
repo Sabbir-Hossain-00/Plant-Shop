@@ -172,17 +172,19 @@ const products = [
   
 
 
-let count = 0 ;
+
 
 
 
 
 
 const plusBtn = (countVal)=>{
+  let count = parseInt(countVal.innerText);
   count++;
   countVal.innerText = count ;
 }
 const minasBtn = (countVal)=>{
+  let count = parseInt(countVal.innerText);
   if(countVal.innerText > 0){
     count -- ;
     countVal.innerText = count ;
